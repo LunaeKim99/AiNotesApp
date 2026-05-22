@@ -1,4 +1,4 @@
-# AiNotes App
+# Note App
 
 A Flutter notes application with Clean Architecture, BLoC state management, local WebView editor, and responsive design.
 
@@ -7,8 +7,9 @@ A Flutter notes application with Clean Architecture, BLoC state management, loca
 - **Notes CRUD** — Create, read, update, delete notes
 - **Pin / Unpin** — Pin important notes to the top
 - **Search** — Search notes by title or content
+- **Note Detail Page** — Full detail view with edit, delete, and pin actions
 - **WebView Editor** — Rich text editor with toolbar (bold, italic, lists, headings) via local HTML/JS
-- **Native Editor** — Alternative quick-edit mode without WebView
+- **Fallback Editor** — Native TextField editor when WebView is unavailable
 - **Sidebar** — Inline sidebar on desktop/tablet (hide/show), drawer on mobile
 - **Responsive** — 3 breakpoints: mobile (<600px), tablet (600–1024px), desktop (>1024px)
 - **Settings** — Theme (light/dark/system), sort order, editor font size
@@ -24,9 +25,12 @@ lib/
 ├── app/
 │   └── app.dart                    # MaterialApp + BLoC providers + theme
 ├── core/
-│   ├── constants/                  # App constants, breakpoints
+│   ├── constants/                  # AppColors, AppStrings, AppSizes
 │   ├── di/                         # Dependency injection (get_it)
-│   └── theme/                      # Light/dark theme definitions
+│   ├── errors/                     # Failures & Exceptions
+│   ├── theme/                      # Light/dark theme definitions
+│   ├── utils/                      # Helpers (date, id, text)
+│   └── widgets/                    # AppButton, LoadingView, EmptyStateView
 └── features/
     ├── notes/                      # Notes feature module
     │   ├── data/
@@ -40,8 +44,8 @@ lib/
     │   └── presentation/
     │       ├── bloc/               # NoteBloc (events + states)
     │       ├── cubit/              # SidebarCubit
-    │       ├── pages/              # Notes page, editor pages
-    │       └── widgets/            # Reusable widgets
+    │       ├── pages/              # Notes page, detail page, editor pages
+    │       └── widgets/            # NotesList, NoteCard, Sidebar, editors
     └── settings/                   # Settings feature module
         ├── domain/entities/        # AppSettings entity (theme, sort, font)
         └── presentation/
@@ -66,10 +70,11 @@ Clean Architecture layers:
 ## Project Structure Details
 
 | Layer | Description |
-|---|---|
+|---|---|---|
+| **core** | Shared utilities: constants (`AppColors`, `AppStrings`, `AppSizes`), error handling (`Failures`, `Exceptions`), helpers (`formatDate`, `generateId`, `truncateText`), reusable widgets (`AppButton`, `LoadingView`, `EmptyStateView`), DI setup (`get_it`), and theming. |
 | **domain** | Pure Dart — no framework dependencies. Contains `Note` entity, `NoteRepository` abstract class, and use cases. |
 | **data** | Implements domain contracts. `NoteLocalDataSource` reads/writes JSON via SharedPreferences. `NoteModel` handles JSON serialization/deserialization. |
-| **presentation** | Flutter UI with `flutter_bloc`. `NoteBloc` manages CRUD + search. `SidebarCubit` manages sidebar visibility. `SettingsCubit` manages app settings. |
+| **presentation** | Flutter UI with `flutter_bloc`. `NoteBloc` manages CRUD + search. `SidebarCubit` manages sidebar visibility. `SettingsCubit` manages app settings. Widgets include `NotesList`, `NoteCard`, `WebviewToolbar`, and `FallbackEditor`. |
 
 ## State Management
 
@@ -110,6 +115,11 @@ flutter build apk --debug
 flutter test
 ```
 
+Test coverage:
+- **`note_bloc_test.dart`** — 5 BLoC test cases (initial state, load success, load error, create, delete)
+- **`get_notes_test.dart`** — 3 use case test cases (success, empty, error)
+- **`sidebar_cubit_test.dart`** — 5 cubit test cases (initial, toggle, show, hide)
+
 ## Dependencies
 
 | Package | Version | Purpose |
@@ -121,6 +131,13 @@ flutter test
 | `uuid` | ^4.5.1 | Unique ID generation |
 | `intl` | ^0.20.2 | Date formatting |
 | `webview_flutter` | ^4.12.0 | Local WebView editor |
+
+### Dev Dependencies
+
+| Package | Version | Purpose |
+|---|---|---|
+| `bloc_test` | ^10.0.0 | BLoC testing utilities |
+| `mocktail` | ^1.0.4 | Mocking for Dart tests |
 
 ## WebView Editor
 

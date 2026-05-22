@@ -1,7 +1,7 @@
 name: note_app
 description: "A notes app with Clean Architecture, BLoC, and local WebView editor."
 publish_to: 'none'
-version: 0.1.0-dev.1
+version: 0.2.0
 
 environment:
   sdk: ^3.11.4

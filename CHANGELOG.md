@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.2.0] - 2026-05-23
+
+### Added
+
+- **Core Utility Layer**
+  - `AppColors` — centralized color constants (primary, error, success, surface, etc.)
+  - `AppStrings` — all UI strings in one place for easy localization
+  - `AppSizes` — layout constants (sidebar width, paddings, radii, breakpoints)
+  - `Failures` — abstract `Failure` with `CacheFailure`, `ServerFailure`, `UnknownFailure`
+  - `Exceptions` — `CacheException`, `ServerException`
+  - `Helpers` — `formatDate()`, `generateId()` (UUID), `truncateText()`
+
+- **Core Reusable Widgets**
+  - `AppButton` — custom button with loading state
+  - `LoadingView` — centered loading spinner with optional message
+  - `EmptyStateView` — empty state with icon, message, and action button
+
+- **Note Detail Page**
+  - `NoteDetailPage` — full detail view with title, date, content, pin badge
+  - Edit, delete (with confirmation dialog), pin/unpin actions in AppBar
+
+- **Notes List Widget**
+  - `NotesList` — replaces inline list logic; BLoC-powered with pinned/unpinned sections
+  - Pull-to-refresh, long-press context menu (pin/delete)
+  - Loading, empty, and error states handled via core widgets
+
+- **Note Card Widget**
+  - `NoteCard` — card-style note item with title, content snippet, pin icon, date
+
+- **WebView Toolbar**
+  - `WebviewToolbar` — bold/italic/underline formatting buttons with save action
+
+- **Fallback Editor**
+  - `FallbackEditor` — native TextField-based editor when WebView fails to load
+
+- **Testing**
+  - `GetNotes` use case test: 3 cases (success, empty, error)
+  - `SidebarCubit` test: 5 cases (initial, toggle x2, show, hide)
+
+### Changed
+
+- Version bump: `0.1.0-dev.1` → `0.2.0`
+
 ## [0.1.0-dev.1] - 2026-05-22
 
 ### ✨ InDev — Initial Development Build
