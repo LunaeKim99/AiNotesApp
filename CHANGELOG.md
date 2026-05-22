@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.0] - 2026-05-23
+
+### Changed
+
+- **Nama aplikasi**: `Note App` → **Gurat**
+- **Tampilan notes**: List view → **Google Keep-style grid view** (`GridView.builder` dengan responsive columns)
+- **Mobile layout**: `NoteTile` (ListTile) → `NoteCard` dengan long-press context menu (pin/delete)
+- **Tablet/Desktop layout**: `NotesList` → `CustomScrollView` + `SliverGrid` dengan pinned/unpinned sections
+- **`NoteCard`**: styling baru — border tipis, `elevation: 0.5`, padding 12px, font weight 600
+- **Responsive grid columns**: 1 (<360px), 2 (<600px), 3 (<900px), 4 (≥900px)
+
+### Removed
+
+- **`NoteTile` widget** — digantikan oleh `NoteCard` di semua layout
+
+### Technical Notes
+
+- Built-in `GridView.builder` (tanpa package tambahan)
+- `SliverGridDelegateWithFixedCrossAxisCount` untuk child aspect ratio konsisten
+- `CustomScrollView` + `SliverGrid` untuk section headers di tablet/desktop
+
 ## [0.2.0] - 2026-05-23
 
 ### Added

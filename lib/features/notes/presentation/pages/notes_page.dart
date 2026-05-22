@@ -5,7 +5,7 @@ import 'package:note_app/features/notes/domain/entities/note.dart';
 import 'package:note_app/features/notes/presentation/bloc/note_bloc.dart';
 import 'package:note_app/features/notes/presentation/cubit/sidebar_cubit.dart';
 import 'package:note_app/features/notes/presentation/pages/note_editor_page.dart';
-import 'package:note_app/features/notes/presentation/widgets/note_tile.dart';
+import 'package:note_app/features/notes/presentation/widgets/note_card.dart';
 import 'package:note_app/features/notes/presentation/widgets/search_bar_widget.dart';
 import 'package:note_app/features/notes/presentation/widgets/sidebar.dart';
 import 'package:note_app/features/settings/domain/entities/app_settings.dart';
@@ -63,6 +63,50 @@ class _NotesPageState extends State<NotesPage> {
     );
   }
 
+  void _showNoteContextMenu(BuildContext context, Note note) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(
+                note.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+              ),
+              title: Text(note.isPinned ? 'Unpin' : 'Pin'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _togglePin(note);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline),
+              title: const Text('Delete'),
+              onTap: () {
+                Navigator.pop(ctx);
+                _deleteNote(note);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  int _getGridColumnCount(double width) {
+    if (width < 360) {
+      return 1;
+    }
+    if (width < 600) {
+      return 2;
+    }
+    if (width < 900) {
+      return 3;
+    }
+    return 4;
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -71,7 +115,7 @@ class _NotesPageState extends State<NotesPage> {
     return Scaffold(
       key: layout == _ScreenLayout.mobile ? _scaffoldKey : null,
       appBar: AppBar(
-        title: Text('Notes'),
+        title: const Text('Gurat'),
         leading: _buildLeading(layout),
       ),
       drawer: layout == _ScreenLayout.mobile ? _buildDrawer() : null,
@@ -253,15 +297,22 @@ class _NotesPageState extends State<NotesPage> {
               onRefresh: () async {
                 context.read<NoteBloc>().add(const LoadNotes());
               },
-              child: ListView.builder(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(8),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: _getGridColumnCount(
+                      MediaQuery.of(context).size.width),
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 0.9,
+                ),
                 itemCount: displayNotes.length,
                 itemBuilder: (_, i) {
                   final note = displayNotes[i];
-                  return NoteTile(
+                  return NoteCard(
                     note: note,
                     onTap: () => _editNote(note),
-                    onPin: () => _togglePin(note),
-                    onDelete: () => _deleteNote(note),
+                    onLongPress: () => _showNoteContextMenu(context, note),
                   );
                 },
               ),

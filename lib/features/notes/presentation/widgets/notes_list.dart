@@ -68,50 +68,87 @@ class NotesList extends StatelessWidget {
           onRefresh: () async {
             context.read<NoteBloc>().add(const LoadNotes());
           },
-          child: ListView(
-            children: [
+          child: CustomScrollView(
+            slivers: [
               if (pinnedNotes.isNotEmpty) ...[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                  child: Text(
-                    AppStrings.pinned,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.outline,
-                          letterSpacing: 1,
-                        ),
-                  ),
-                ),
-                ...pinnedNotes.map((note) => NoteCard(
-                      note: note,
-                      onTap: () => onEditNote(note),
-                      onLongPress: () => _showContextMenu(
-                          context, note, onTogglePin, onDeleteNote),
-                    )),
-                const Divider(height: 24),
-              ],
-              if (unpinnedNotes.isNotEmpty) ...[
-                if (pinnedNotes.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
                     child: Text(
-                      AppStrings.allNotes,
+                      AppStrings.pinned,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                             color: Theme.of(context).colorScheme.outline,
                             letterSpacing: 1,
                           ),
                     ),
                   ),
-                ...unpinnedNotes.map((note) => NoteCard(
-                      note: note,
-                      onTap: () => onEditNote(note),
+                ),
+                SliverGrid(
+                  gridDelegate: _gridDelegate(context),
+                  delegate: SliverChildBuilderDelegate(
+                    (_, i) => NoteCard(
+                      note: pinnedNotes[i],
+                      onTap: () => onEditNote(pinnedNotes[i]),
                       onLongPress: () => _showContextMenu(
-                          context, note, onTogglePin, onDeleteNote),
-                    )),
+                          context, pinnedNotes[i], onTogglePin, onDeleteNote),
+                    ),
+                    childCount: pinnedNotes.length,
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: Divider(height: 24),
+                ),
+              ],
+              if (unpinnedNotes.isNotEmpty) ...[
+                if (pinnedNotes.isNotEmpty)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+                      child: Text(
+                        AppStrings.allNotes,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: Theme.of(context).colorScheme.outline,
+                              letterSpacing: 1,
+                            ),
+                      ),
+                    ),
+                  ),
+                SliverGrid(
+                  gridDelegate: _gridDelegate(context),
+                  delegate: SliverChildBuilderDelegate(
+                    (_, i) => NoteCard(
+                      note: unpinnedNotes[i],
+                      onTap: () => onEditNote(unpinnedNotes[i]),
+                      onLongPress: () => _showContextMenu(
+                          context, unpinnedNotes[i], onTogglePin, onDeleteNote),
+                    ),
+                    childCount: unpinnedNotes.length,
+                  ),
+                ),
               ],
             ],
           ),
         );
       },
+    );
+  }
+
+  SliverGridDelegate _gridDelegate(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    int crossAxisCount;
+    if (width < 600) {
+      crossAxisCount = 2;
+    } else if (width < 900) {
+      crossAxisCount = 3;
+    } else {
+      crossAxisCount = 4;
+    }
+
+    return SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: crossAxisCount,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      childAspectRatio: 0.9,
     );
   }
 

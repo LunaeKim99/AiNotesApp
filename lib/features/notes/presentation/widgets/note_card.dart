@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:note_app/features/notes/domain/entities/note.dart';
-import 'package:note_app/core/utils/helpers.dart';
 
 class NoteCard extends StatelessWidget {
   final Note note;
@@ -21,46 +20,54 @@ class NoteCard extends StatelessWidget {
     final dateStr = DateFormat('MMM d, yyyy').format(note.updatedAt);
 
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: theme.colorScheme.outlineVariant, width: 0.5),
+      ),
+      elevation: 0.5,
       child: InkWell(
         onTap: onTap,
         onLongPress: onLongPress,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Text(
                       note.title.isEmpty ? 'Untitled' : note.title,
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight:
-                            note.isPinned ? FontWeight.bold : FontWeight.normal,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                   if (note.isPinned)
-                    Icon(Icons.push_pin,
-                        size: 16, color: theme.colorScheme.primary),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: Icon(Icons.push_pin,
+                          size: 16, color: theme.colorScheme.primary),
+                    ),
                 ],
               ),
               if (note.content.isNotEmpty) ...[
-                const SizedBox(height: 4),
+                const SizedBox(height: 6),
                 Text(
-                  truncateText(note.content, 100),
-                  maxLines: 2,
+                  note.content,
+                  maxLines: 5,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
-              const SizedBox(height: 8),
+              const Spacer(),
               Text(
                 dateStr,
                 style: theme.textTheme.labelSmall?.copyWith(

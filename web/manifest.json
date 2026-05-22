@@ -1,11 +1,11 @@
 {
-    "name": "note_app",
-    "short_name": "note_app",
+    "name": "Gurat",
+    "short_name": "Gurat",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Gurat — Catatan cepat dan rapi.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

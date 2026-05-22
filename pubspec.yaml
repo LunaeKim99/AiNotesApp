@@ -1,7 +1,7 @@
 name: note_app
-description: "A notes app with Clean Architecture, BLoC, and local WebView editor."
+description: "Gurat — A notes app with Clean Architecture, BLoC, and local WebView editor."
 publish_to: 'none'
-version: 0.2.0
+version: 0.3.0
 
 environment:
   sdk: ^3.11.4

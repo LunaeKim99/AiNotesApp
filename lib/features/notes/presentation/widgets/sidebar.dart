@@ -109,7 +109,7 @@ class _Header extends StatelessWidget {
           Icon(Icons.note_alt_outlined, color: theme.colorScheme.primary),
           const SizedBox(width: 8),
           Text(
-            'Notes',
+            'Gurat',
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),

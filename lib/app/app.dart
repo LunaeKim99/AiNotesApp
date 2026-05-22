@@ -31,7 +31,7 @@ class NoteApp extends StatelessWidget {
       child: BlocBuilder<SettingsCubit, AppSettings>(
         builder: (context, settings) {
           return MaterialApp(
-            title: 'Note App',
+            title: 'Gurat',
             debugShowCheckedModeBanner: false,
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,

@@ -1,10 +1,11 @@
-# Note App
+# Gurat
 
-A Flutter notes application with Clean Architecture, BLoC state management, local WebView editor, and responsive design.
+A Flutter notes application with Google Keep-style grid layout, Clean Architecture, BLoC state management, local WebView editor, and responsive design.
 
 ## Features
 
 - **Notes CRUD** — Create, read, update, delete notes
+- **Grid View** — Google Keep-style block layout (responsive columns: 1–4)
 - **Pin / Unpin** — Pin important notes to the top
 - **Search** — Search notes by title or content
 - **Note Detail Page** — Full detail view with edit, delete, and pin actions
@@ -45,7 +46,7 @@ lib/
     │       ├── bloc/               # NoteBloc (events + states)
     │       ├── cubit/              # SidebarCubit
     │       ├── pages/              # Notes page, detail page, editor pages
-    │       └── widgets/            # NotesList, NoteCard, Sidebar, editors
+    │       └── widgets/            # NoteCard, Sidebar, editors
     └── settings/                   # Settings feature module
         ├── domain/entities/        # AppSettings entity (theme, sort, font)
         └── presentation/
@@ -74,7 +75,7 @@ Clean Architecture layers:
 | **core** | Shared utilities: constants (`AppColors`, `AppStrings`, `AppSizes`), error handling (`Failures`, `Exceptions`), helpers (`formatDate`, `generateId`, `truncateText`), reusable widgets (`AppButton`, `LoadingView`, `EmptyStateView`), DI setup (`get_it`), and theming. |
 | **domain** | Pure Dart — no framework dependencies. Contains `Note` entity, `NoteRepository` abstract class, and use cases. |
 | **data** | Implements domain contracts. `NoteLocalDataSource` reads/writes JSON via SharedPreferences. `NoteModel` handles JSON serialization/deserialization. |
-| **presentation** | Flutter UI with `flutter_bloc`. `NoteBloc` manages CRUD + search. `SidebarCubit` manages sidebar visibility. `SettingsCubit` manages app settings. Widgets include `NotesList`, `NoteCard`, `WebviewToolbar`, and `FallbackEditor`. |
+| **presentation** | Flutter UI with `flutter_bloc`. `NoteBloc` manages CRUD + search. `SidebarCubit` manages sidebar visibility. `SettingsCubit` manages app settings. Widgets include `NoteCard`, `WebviewToolbar`, and `FallbackEditor`. Notes displayed in a responsive grid layout (Google Keep-style). |
 
 ## State Management
 
